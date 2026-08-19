@@ -43,6 +43,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3331e9cc-7a59-47cb-93d1-272801786879"
+      }
+    },
+    "owner": "mxelaniies-team"
   }
 }
