@@ -1,39 +1,28 @@
-import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import CopyButton from "../components/CopyButton";
-import HomeHeader from "../components/HomeHeader";
-import MacroGrid from "../components/MacroGrid";
-import RecentMeals from "../components/RecentMeals";
-import ShareButton from "../components/ShareButton";
-import { getMeals, Meal } from "../storage/meals";
+import HomeHeader from "../../components/HomeHeader";
+import TopStations from "../../components/TopStations";
 import { globalStyles } from "../styles/global";
+import { getWaterStations, WaterStation } from "../utilities/getStations";
 
 export default function HomeScreen() {
-  const [meals, setMeals] = useState<Meal[]>([]);
+  const [stations, setStations] = useState<WaterStation[]>([]);
 
-  const loadMeals = async () => {
-    const data = await getMeals();
-    setMeals(data);
-    console.log("Loaded meals:", data);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      loadMeals();
-    }, []),
-  );
+  useEffect(() => {
+    async function loadStations() {
+      const fetchedStations = await getWaterStations();
+      setStations(fetchedStations);
+    }
+    loadStations();
+  }, []);
 
   return (
     <ScrollView style={globalStyles.container}>
       <View style={globalStyles.header}>
-        <Text style={globalStyles.title}>MacroZone</Text>
-        <ShareButton meals={meals} />
+        <Text style={globalStyles.title}>Aquaholic🍻</Text>
       </View>
       <HomeHeader />
-      <MacroGrid meals={meals} />
-      <CopyButton meals={meals} />
-      <RecentMeals meals={meals} onDelete={loadMeals} />
+      <TopStations />
     </ScrollView>
   );
 }
