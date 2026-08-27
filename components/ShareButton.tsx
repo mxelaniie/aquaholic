@@ -1,26 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Share, TouchableOpacity } from "react-native";
+import { Platform, Share, TouchableOpacity } from "react-native";
 import { colors } from "../app/styles/global";
-import { Meal } from "../app/utilities/getStations";
+import { WaterStation } from "../app/utilities/getStations";
 
 type ShareButtonProps = {
-  meals: Meal[];
+  stations: WaterStation[];
 };
 
-export default function ShareButton({ meals }: ShareButtonProps) {
+export default function ShareButton({ stations }: ShareButtonProps) {
   const handleShare = async () => {
-    const totals = meals.reduce(
-      (acc, meal) => ({
-        calories: acc.calories + meal.calories,
-        protein: acc.protein + meal.protein,
-        carbs: acc.carbs + meal.carbs,
-        fat: acc.fat + meal.fat,
-      }),
-      { calories: 0, protein: 0, carbs: 0, fat: 0 },
-    );
+    if (Platform.OS === "web") {
+      window.alert("Funktion in Web-Browser nicht verfuegbar.");
+      return;
+    }
+
+    const stationNames = stations.map((station) => station.name).join(", ");
 
     await Share.share({
-      message: `MacroZone Daily Summary\n\nCalories: ${totals.calories}\nProtein: ${totals.protein}g\nCarbs: ${totals.carbs}g\nFat: ${totals.fat}g\n\nMeals: ${meals.length} logged today`,
+      message: `Water Stations: ${stationNames}`,
     });
   };
 

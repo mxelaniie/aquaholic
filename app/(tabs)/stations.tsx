@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
+import ShareButton from "../../components/ShareButton";
 import { globalStyles } from "../styles/global";
+import { getWaterStations, WaterStation } from "../utilities/getStations";
 import { getStationValues, StationValues } from "../utilities/getValues";
 
 export default function MealsScreen() {
@@ -14,10 +16,20 @@ export default function MealsScreen() {
     loadStationValues();
   }, []);
 
+  const [stations, setStations] = useState<WaterStation[]>([]);
+  useEffect(() => {
+    async function loadStations() {
+      const fetchedStations = await getWaterStations();
+      setStations(fetchedStations);
+    }
+    loadStations();
+  }, []);
+
   return (
     <ScrollView style={globalStyles.container}>
       <View style={globalStyles.header}>
         <Text style={globalStyles.title}>Alle Stationen</Text>
+        <ShareButton stations={stations} />
       </View>
       <View style={{ marginTop: 30 }}>
         {stationValues.length === 0 ? (
