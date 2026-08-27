@@ -1,17 +1,19 @@
 import { getWaterStations, WaterStation } from "@/app/utilities/getStations";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useRiverStore } from "../app/store/RiverStore";
 
 export default function TopStations() {
   const [stations, setStations] = useState<WaterStation[]>([]);
+  const river = useRiverStore((state) => state.river);
 
   useEffect(() => {
     async function loadStations() {
-      const fetchedStations = await getWaterStations();
+      const fetchedStations = await getWaterStations(river);
       setStations(fetchedStations);
     }
     loadStations();
-  }, []);
+  }, [river]);
 
   return (
     <View style={{ marginTop: 30 }}>

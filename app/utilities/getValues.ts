@@ -9,14 +9,13 @@ export type StationValues = {
 
 const ENDPOINT = "https://data.bafu.admin.ch/api";
 
-export async function getStationValues(): Promise<StationValues[]> {
-  // Stationen des ausgewählten Flusses holen
-  const riverStations = await getWaterStations();
+export async function getStationValues(
+  river: string,
+): Promise<StationValues[]> {
+  const riverStations = await getWaterStations(river);
 
-  // Stationsnummern der gewünschten Stationen
   const stationNumbers = riverStations.map((station) => station.no);
 
-  // Live-Daten von BAFU holen
   const query = `
   query ObservationsDataLive {
     water {

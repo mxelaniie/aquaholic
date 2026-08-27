@@ -8,13 +8,13 @@ export type WaterStation = {
 
 const ENDPOINT = "https://data.bafu.admin.ch/api";
 
-export async function getWaterStations(): Promise<WaterStation[]> {
+export async function getWaterStations(river: string): Promise<WaterStation[]> {
   const query = `
     {
       water {
         observations {
           stations(
-            where: { riverName: { _eq: "Aare" } }
+            where: { riverName: { _eq: "${river}" } } 
           ) {
             name
             no
@@ -36,6 +36,11 @@ export async function getWaterStations(): Promise<WaterStation[]> {
   });
 
   const data = await response.json();
+
+  if (data.errors) {
+    console.log("GraphQL Fehler:", data.errors);
+    return [];
+  }
 
   return data.data.water.observations.stations;
 }
