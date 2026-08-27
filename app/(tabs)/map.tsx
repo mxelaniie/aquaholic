@@ -4,6 +4,7 @@ import { StyleSheet, View } from "react-native";
 import WaterMap from "../../components/WaterMap";
 
 import { getWaterStations, WaterStation } from "../utilities/getStations";
+import { getStationValues, StationValues } from "../utilities/getValues";
 
 export default function AddMealScreen() {
   const [stations, setStations] = useState<WaterStation[]>([]);
@@ -17,9 +18,19 @@ export default function AddMealScreen() {
     loadStations();
   }, []);
 
+  const [stationValues, setStationValues] = useState<StationValues[]>([]);
+
+  useEffect(() => {
+    async function loadStationValues() {
+      const fetchedStationValues = await getStationValues();
+      setStationValues(fetchedStationValues);
+    }
+    loadStationValues();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <WaterMap stations={stations} />
+      <WaterMap stations={stations} stationValues={stationValues} />
     </View>
   );
 }

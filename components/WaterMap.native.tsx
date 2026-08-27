@@ -1,35 +1,15 @@
-import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { getWaterStations, WaterStation } from "../app/utilities/getStations";
-import { getStationValues, StationValues } from "../app/utilities/getValues";
+import { WaterStation } from "../app/utilities/getStations";
+import { StationValues } from "../app/utilities/getValues";
 
 type WaterMapProps = {
   stations: WaterStation[];
+  stationValues: StationValues[];
 };
 
-export default function WaterMap({ stations }: WaterMapProps) {
-  const [stationValues, setStationValues] = useState<StationValues[]>([]);
-
-  useEffect(() => {
-    async function loadStationValues() {
-      const fetchedStationValues = await getStationValues();
-      setStationValues(fetchedStationValues);
-    }
-    loadStationValues();
-  }, []);
-
-  const [waterStation, setWaterStation] = useState<WaterStation[]>([]);
-
-  useEffect(() => {
-    async function loadStations() {
-      const fetchedStations = await getWaterStations();
-      setWaterStation(fetchedStations);
-    }
-    loadStations();
-  }, []);
-
-  const marker = waterStation
+export default function WaterMap({ stations, stationValues }: WaterMapProps) {
+  const marker = stations
     .map((station) => {
       const value = stationValues.find(
         (value) => value.stationNo === station.no && value.value !== null,
